@@ -154,7 +154,7 @@ export function offer(overrides: Partial<Offer> = {}): Offer {
 }
 
 export function report(overrides: Partial<SiteReport> = {}): SiteReport {
-  return { status: 'ok', detail: '', pages_ok: 3, pages_total: 3, offers: [], ...overrides }
+  return { status: 'ok', detail: '', pages_ok: 3, pages_total: 3, pages_failed: [], offers: [], ...overrides }
 }
 
 export function payloadWith(

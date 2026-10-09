@@ -71,7 +71,7 @@ def summary_markdown(site_results, decision, note, duration_ms):
     for result in site_results:
         best = result.best_qualifying()
         status = STATUS_LABELS.get(result.status, result.status)
-        if result.status != STATUS_OK and result.detail:
+        if result.detail:
             status = f"{status} ({result.detail})"
         lines.append(
             f"| {SITE_NAMES.get(result.site, result.site)} | {status} | "

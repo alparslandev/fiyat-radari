@@ -55,10 +55,16 @@ class SiteResult:
 
     @property
     def status(self):
-        for page in self.pages:
-            if page.status != STATUS_OK:
-                return page.status
-        return STATUS_OK if self.pages else STATUS_NO_DATA
+        changed = [page for page in self.pages if page.status == STATUS_PRODUCT_CHANGED]
+        if changed:
+            return STATUS_PRODUCT_CHANGED
+        if any(page.status == STATUS_OK for page in self.pages):
+            return STATUS_OK
+        return self.pages[0].status if self.pages else STATUS_NO_DATA
+
+    @property
+    def pages_failed(self):
+        return [page.product_id for page in self.pages if page.status != STATUS_OK]
 
     @property
     def detail(self):
@@ -78,5 +84,6 @@ class SiteResult:
             "detail": self.detail,
             "pages_ok": sum(1 for page in self.pages if page.status == STATUS_OK),
             "pages_total": len(self.pages),
+            "pages_failed": self.pages_failed,
             "offers": [offer.to_json() for offer in self.offers],
         }

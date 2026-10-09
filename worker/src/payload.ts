@@ -29,6 +29,7 @@ export interface SiteReport {
   detail: string
   pages_ok: number
   pages_total: number
+  pages_failed: string[]
   offers: Offer[]
 }
 
@@ -52,6 +53,7 @@ const UNREPORTED_SITE: SiteReport = {
   detail: 'rapor gelmedi',
   pages_ok: 0,
   pages_total: 0,
+  pages_failed: [],
   offers: [],
 }
 const WEB_ADDRESS = /^https?:\/\/\S+$/
@@ -157,6 +159,7 @@ function siteReportAt(value: unknown, site: Site, field: string): SiteReport {
     detail: nullableTextAt(raw.detail, `${field}.detail`) ?? '',
     pages_ok: nullableNumberAt(raw.pages_ok, `${field}.pages_ok`) ?? 0,
     pages_total: nullableNumberAt(raw.pages_total, `${field}.pages_total`) ?? 0,
+    pages_failed: textListAt(raw.pages_failed, `${field}.pages_failed`),
     offers: offers.map((offer, index) => offerAt(offer, site, `${field}.offers[${index}]`)),
   }
 }

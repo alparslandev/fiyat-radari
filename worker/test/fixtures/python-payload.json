@@ -10,6 +10,7 @@
    "detail": "",
    "pages_ok": 3,
    "pages_total": 3,
+   "pages_failed": [],
    "offers": [
     {
      "key": "trendyol:985256847:968",
@@ -626,6 +627,7 @@
    "detail": "",
    "pages_ok": 3,
    "pages_total": 3,
+   "pages_failed": [],
    "offers": [
     {
      "key": "hepsiburada:HBCV00009Z40DM:Hepsiburada",
@@ -778,6 +780,7 @@
    "detail": "",
    "pages_ok": 3,
    "pages_total": 3,
+   "pages_failed": [],
    "offers": [
     {
      "key": "amazon:B0FQFTYPTQ:turkiye-magaza",

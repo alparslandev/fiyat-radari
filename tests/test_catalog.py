@@ -2,7 +2,7 @@ from collections import Counter
 
 import pytest
 
-from radar.catalog import CATALOG, SITES
+from radar.catalog import CATALOG, COUNTRY_CHOICE_COOKIES, RELOAD_ONCE_WHEN_BLOCKED, SITES
 from radar.sites import ADAPTERS
 
 
@@ -29,3 +29,13 @@ def test_browser_scripts_have_their_helpers_inlined(site):
     for script in (adapter.READY_JS, adapter.EXTRACT_JS):
         assert "__CHALLENGE__" not in script
         assert "__JSONLD__" not in script
+
+
+def test_trendyol_is_opened_with_turkey_chosen_as_the_country():
+    cookies = {cookie["name"]: cookie["value"] for cookie in COUNTRY_CHOICE_COOKIES["trendyol"]}
+    assert cookies == {"storefrontId": "1", "countryCode": "TR", "language": "tr"}
+    assert all(cookie["domain"] == ".trendyol.com" for cookie in COUNTRY_CHOICE_COOKIES["trendyol"])
+
+
+def test_only_amazon_pages_are_reloaded_once_after_a_block():
+    assert RELOAD_ONCE_WHEN_BLOCKED == {"amazon"}

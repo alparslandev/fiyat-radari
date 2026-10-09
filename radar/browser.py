@@ -7,7 +7,7 @@ from playwright.sync_api import Error as PlaywrightError
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
-from .catalog import SITES, WARMUP_URLS, products_for
+from .catalog import COUNTRY_CHOICE_COOKIES, RELOAD_ONCE_WHEN_BLOCKED, SITES, WARMUP_URLS, products_for
 from .model import STATUS_BLOCKED, STATUS_ERROR, STATUS_OK, PageResult, SiteResult
 from .sites import ADAPTERS
 
@@ -17,6 +17,7 @@ VIEWPORT = {"width": 1600, "height": 900}
 NAVIGATION_TIMEOUT_MS = 30_000
 READY_TIMEOUT_MS = 25_000
 WARMUP_PAUSE_MS = 1_500
+RELOAD_PAUSE_MS = 2_500
 MIN_STEP_TIMEOUT_MS = 1_000
 BLOCKING_STATUSES = {403, 429, 503}
 
@@ -91,6 +92,7 @@ def scan(browser, deadline, diagnostics_dir=None, always_diagnose=False, raw_sin
         adapter = ADAPTERS[site]
         site_result = SiteResult(site)
         context = browser.new_context(locale=LOCALE, timezone_id=TIMEZONE, viewport=VIEWPORT)
+        context.add_cookies(list(COUNTRY_CHOICE_COOKIES.get(site, ())))
         try:
             page = context.new_page()
             _warm_up(page, site)
@@ -99,6 +101,11 @@ def scan(browser, deadline, diagnostics_dir=None, always_diagnose=False, raw_sin
                     site_result.pages.append(PageResult(product.product_id, product.color, STATUS_ERROR, "süre doldu"))
                     continue
                 result, raw = _visit(page, adapter, product, deadline)
+                if result.status == STATUS_BLOCKED and site in RELOAD_ONCE_WHEN_BLOCKED and _remaining_ms(deadline) > NAVIGATION_TIMEOUT_MS:
+                    page.wait_for_timeout(RELOAD_PAUSE_MS)
+                    first_ms = result.duration_ms
+                    result, raw = _visit(page, adapter, product, deadline)
+                    result.duration_ms += first_ms + RELOAD_PAUSE_MS
                 site_result.pages.append(result)
                 if raw_sink is not None:
                     raw_sink(product, raw, result)

@@ -6,6 +6,16 @@ SITE_NAMES = {"trendyol": "Trendyol", "hepsiburada": "Hepsiburada", "amazon": "A
 
 WARMUP_URLS = {"amazon": "https://www.amazon.com.tr/"}
 
+COUNTRY_CHOICE_COOKIES = {
+    "trendyol": (
+        {"name": "storefrontId", "value": "1", "domain": ".trendyol.com", "path": "/"},
+        {"name": "countryCode", "value": "TR", "domain": ".trendyol.com", "path": "/"},
+        {"name": "language", "value": "tr", "domain": ".trendyol.com", "path": "/"},
+    ),
+}
+
+RELOAD_ONCE_WHEN_BLOCKED = {"amazon"}
+
 
 @dataclass(frozen=True)
 class Product:

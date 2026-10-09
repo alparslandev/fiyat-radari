@@ -1,5 +1,5 @@
 import type { Env } from './env'
-import { nextHealthState, type HealthAction, type HealthState } from './health'
+import { FAILURES_BEFORE_ALERT, nextHealthState, type AlertRule, type HealthAction, type HealthState } from './health'
 import { dealActions, dealNotice, siteDownNotice, siteRecoveredNotice } from './messages'
 import { announce, errorMessage } from './notify'
 import { parsePayload, perSite, SITES, type IngestPayload, type Offer, type Site } from './payload'
@@ -11,6 +11,17 @@ export const MAX_BODY_BYTES = 256 * 1024
 const DAY_MS = 24 * 60 * 60 * 1000
 const MAX_CLOCK_SKEW_MS = 5 * 60 * 1000
 const BEARER = /^Bearer\s+(\S+)\s*$/i
+const MINUTE_MS = 60_000
+
+export const SITE_ALERT_AFTER_MS: Record<Site, number> = {
+  trendyol: 60 * MINUTE_MS,
+  hepsiburada: 60 * MINUTE_MS,
+  amazon: 180 * MINUTE_MS,
+}
+
+function siteAlertRule(site: Site): AlertRule {
+  return ({ failures, outageMs }) => failures >= FAILURES_BEFORE_ALERT && outageMs >= SITE_ALERT_AFTER_MS[site]
+}
 
 type SiteHealth = Record<Site, { state: HealthState; action: HealthAction }>
 
@@ -135,6 +146,7 @@ export async function handleIngest(request: Request, env: Env, now: number): Pro
       previous.health[site],
       [{ name: site, ok: report.status === 'ok', detail: report.detail }],
       checkedAt,
+      siteAlertRule(site),
     )
     return { state, action }
   })

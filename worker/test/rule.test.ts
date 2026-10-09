@@ -114,6 +114,20 @@ describe('decide', () => {
     expect(step(T0 + 30 * MINUTE, [trendyolA(103_000)]).deal).toBeNull()
   })
 
+  test('a notified deal whose page failed this run is held, not treated as sold out', () => {
+    const first = decide(warmState(105_000, T0), payloadWith([amazonB(103_000)]), T0)
+    expect(first.deal).not.toBeNull()
+
+    const partial = payloadWith([trendyolA(104_000)])
+    partial.sites.amazon = { ...partial.sites.amazon, pages_failed: ['b'] }
+    const held = decide(first.state, partial, T0 + 15 * MINUTE)
+    expect(held.deal).toBeNull()
+    expect(held.state.notified['amazon:b:1']?.current).toBe(103_000)
+
+    const soldOut = decide(first.state, payloadWith([trendyolA(104_000)]), T0 + 15 * MINUTE)
+    expect(soldOut.deal?.best.key).toBe('trendyol:a:1')
+  })
+
   test('FORGET_AFTER prunes a deal that has not been seen for 6 hours', () => {
     const { step, state } = timeline(warmState(105_000, T0))
     step(T0, [trendyolA(103_000)])

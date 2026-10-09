@@ -25,7 +25,7 @@ Kurallar `radar/policy.py`, izlenen sayfalar `radar/catalog.py` içinde.
 - Olağan fiyat: son 7 günde 15 dakikalık dilimlerdeki en ucuz uygun fiyatların medyanı. İlk 24 saat veri birikir, fırsat uyarısı gelmez.
 - En ucuz uygun teklif olağan fiyatın en az 500 TL altına iner ve hâlâ satışta olan, daha önce bildirilmiş fırsatlardan da en az 500 TL ucuzsa bildirilir.
 - Bildirilen fırsat 1.000 TL pahalanır ya da satıştan kalkarsa biter; sonraki en iyi teklif yeniden bildirilebilir.
-- Bir site üst üste 3 tur çalışmazsa, Worker'a uzun süre veri gelmezse ya da GitHub tetiklenemezse ayrıca haber verilir.
+- Bir sitenin hiçbir sayfası Trendyol ve Hepsiburada'da 1 saat, Amazon'da 3 saat boyunca açılamazsa, Worker'a uzun süre veri gelmezse ya da GitHub tetiklenemezse ayrıca haber verilir. Amazon GitHub sunucularına zaman zaman ara sayfa gösterdiği için ona daha uzun süre tanınır.
 
 ## Kurulum
 

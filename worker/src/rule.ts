@@ -72,10 +72,19 @@ function liveOffers(payload: IngestPayload): Offer[] {
   return okSites(payload).flatMap((site) => payload.sites[site].offers.filter((offer) => offer.qualifies))
 }
 
+function productIdOf(key: string): string {
+  return key.split(':')[1] ?? ''
+}
+
+function failedPagesBySite(payload: IngestPayload): Map<Site, Set<string>> {
+  return new Map(SITES.map((site) => [site, new Set(payload.sites[site].pages_failed)]))
+}
+
 function refreshNotified(
   notified: Record<string, NotifiedDeal>,
   ok: Set<Site>,
   seen: Map<string, Offer>,
+  failedPages: Map<Site, Set<string>>,
   now: number,
 ): Record<string, NotifiedDeal> {
   const kept: Record<string, NotifiedDeal> = {}
@@ -87,7 +96,7 @@ function refreshNotified(
         next.current = offer.effective
         next.seenAt = now
         if (next.current >= next.price + DEAL_ENDED_TL) next.price = next.current
-      } else {
+      } else if (!failedPages.get(next.site)?.has(productIdOf(key))) {
         next.current = null
       }
     }
@@ -125,7 +134,7 @@ export function decide(state: RuleState, payload: IngestPayload, now: number): D
   const ok = okSites(payload)
   const live = liveOffers(payload)
   const seen = new Map(live.map((offer) => [offer.key, offer]))
-  const notified = refreshNotified(state.notified, new Set(ok), seen, now)
+  const notified = refreshNotified(state.notified, new Set(ok), seen, failedPagesBySite(payload), now)
   const normal = normalPrice(state.buckets)
 
   if (live.length === 0) {

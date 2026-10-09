@@ -23,13 +23,20 @@ def test_payload_reports_site_status_and_offers():
     assert payload["dispatched_at"] is None
     assert payload["sites"]["trendyol"]["status"] == STATUS_OK
     assert payload["sites"]["trendyol"]["offers"][0]["notes"] == ["not"]
-    assert payload["sites"]["amazon"] == {"status": STATUS_BLOCKED, "detail": "Gümüş: amazon_ara_sayfa", "pages_ok": 1, "pages_total": 2, "offers": []}
+    assert payload["sites"]["amazon"] == {
+        "status": STATUS_OK,
+        "detail": "Gümüş: amazon_ara_sayfa",
+        "pages_ok": 1,
+        "pages_total": 2,
+        "pages_failed": ["B"],
+        "offers": [],
+    }
 
 
 def test_summary_shows_the_cheapest_qualifying_offer_in_turkish():
     markdown = report.summary_markdown(_results(), {"deal": False, "normal": 104000}, "Kuru çalışma", 41000)
     assert "| Trendyol | çalışıyor | 105.000 TL | Gümüş | Trendyol |" in markdown
-    assert "bot koruması (Gümüş: amazon_ara_sayfa)" in markdown
+    assert "| Amazon | çalışıyor (Gümüş: amazon_ara_sayfa) | - | - | - |" in markdown
     assert "Olağan fiyat: 104.000 TL" in markdown
 
 

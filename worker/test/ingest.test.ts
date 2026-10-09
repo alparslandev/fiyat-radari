@@ -238,29 +238,29 @@ describe('handleIngest', () => {
     expect((await failing.json<IngestResponse>()).deal).toBe(true)
   })
 
-  test('alerts after three failing runs of a site and recovers once it works again', async () => {
+  test('alerts once a site has failed for an hour and recovers once it works again', async () => {
     const env = testEnv()
     const calls = stubFetch(answerEverything)
     const at = (minutes: number) => NOW + minutes * MINUTE
     const observed = (minutes: number) => new Date(at(minutes) - 30_000).toISOString()
 
     const actions: string[] = []
-    for (const minutes of [0, 15, 30]) {
+    for (const minutes of [0, 15, 30, 45, 60]) {
       const failing = payloadWith([], { trendyol: 'engel' }, { observed_at: observed(minutes) })
       const response = await post(env, failing, at(minutes))
       actions.push((await response.json<IngestResponse>()).health.trendyol)
     }
-    expect(actions).toEqual(['none', 'none', 'alert'])
+    expect(actions).toEqual(['none', 'none', 'none', 'none', 'alert'])
     expect(callsTo(calls, NTFY_URL)).toHaveLength(1)
     expect(bodyOf<NtfyBody>(callsTo(calls, NTFY_URL)[0])).toMatchObject({
       title: 'Trendyol takibi çalışmıyor',
       priority: 4,
     })
     expect(bodyOf<ResendBody>(callsTo(calls, RESEND_URL)[0]).text).toContain(
-      'Trendyol takibi üst üste 3 turdur başarısız.',
+      'Trendyol takibi üst üste 5 turdur başarısız.',
     )
 
-    const recovered = await post(env, payloadWith([], {}, { observed_at: observed(45) }), at(45))
+    const recovered = await post(env, payloadWith([], {}, { observed_at: observed(75) }), at(75))
     expect((await recovered.json<IngestResponse>()).health.trendyol).toBe('recover')
     expect(callsTo(calls, NTFY_URL)).toHaveLength(2)
     expect(bodyOf<NtfyBody>(callsTo(calls, NTFY_URL)[1])).toMatchObject({
@@ -268,5 +268,21 @@ describe('handleIngest', () => {
       priority: 3,
     })
     expect(callsTo(calls, RESEND_URL)).toHaveLength(2)
+  })
+  test('tolerates Amazon blocks for three hours before alerting', async () => {
+    const env = testEnv()
+    const calls = stubFetch(answerEverything)
+    const at = (minutes: number) => NOW + minutes * MINUTE
+    const observed = (minutes: number) => new Date(at(minutes) - 30_000).toISOString()
+
+    const actions: string[] = []
+    for (let minutes = 0; minutes <= 180; minutes += 15) {
+      const failing = payloadWith([], { amazon: 'engel' }, { observed_at: observed(minutes) })
+      const response = await post(env, failing, at(minutes))
+      actions.push((await response.json<IngestResponse>()).health.amazon)
+    }
+    expect(actions.slice(0, -1).every((action) => action === 'none')).toBe(true)
+    expect(actions.at(-1)).toBe('alert')
+    expect(callsTo(calls, NTFY_URL)).toHaveLength(1)
   })
 })
