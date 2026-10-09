@@ -75,15 +75,36 @@ def _visit(page, adapter, product, deadline):
     return result, raw
 
 
-def _warm_up(page, site):
+def _warm_up(context, site):
     url = WARMUP_URLS.get(site)
     if not url:
         return
+    page = context.new_page()
     try:
         page.goto(url, wait_until="domcontentloaded", timeout=NAVIGATION_TIMEOUT_MS)
         page.wait_for_timeout(WARMUP_PAUSE_MS)
     except PlaywrightError:
         pass
+    finally:
+        page.close()
+
+
+def _scan_product(context, site, adapter, product, deadline, diagnostics_dir, always_diagnose, raw_sink):
+    page = context.new_page()
+    try:
+        result, raw = _visit(page, adapter, product, deadline)
+        if result.status == STATUS_BLOCKED and site in RELOAD_ONCE_WHEN_BLOCKED and _remaining_ms(deadline) > NAVIGATION_TIMEOUT_MS:
+            page.wait_for_timeout(RELOAD_PAUSE_MS)
+            first_ms = result.duration_ms
+            result, raw = _visit(page, adapter, product, deadline)
+            result.duration_ms += first_ms + RELOAD_PAUSE_MS
+        if raw_sink is not None:
+            raw_sink(product, raw, result)
+        if diagnostics_dir and (always_diagnose or result.status != STATUS_OK):
+            _save_diagnostics(page, Path(diagnostics_dir), f"{site}-{product.product_id}", raw)
+        return result
+    finally:
+        page.close()
 
 
 def scan(browser, deadline, diagnostics_dir=None, always_diagnose=False, raw_sink=None):
@@ -94,23 +115,12 @@ def scan(browser, deadline, diagnostics_dir=None, always_diagnose=False, raw_sin
         context = browser.new_context(locale=LOCALE, timezone_id=TIMEZONE, viewport=VIEWPORT)
         context.add_cookies(list(COUNTRY_CHOICE_COOKIES.get(site, ())))
         try:
-            page = context.new_page()
-            _warm_up(page, site)
+            _warm_up(context, site)
             for product in products_for(site):
                 if _remaining_ms(deadline) <= 0:
                     site_result.pages.append(PageResult(product.product_id, product.color, STATUS_ERROR, "süre doldu"))
                     continue
-                result, raw = _visit(page, adapter, product, deadline)
-                if result.status == STATUS_BLOCKED and site in RELOAD_ONCE_WHEN_BLOCKED and _remaining_ms(deadline) > NAVIGATION_TIMEOUT_MS:
-                    page.wait_for_timeout(RELOAD_PAUSE_MS)
-                    first_ms = result.duration_ms
-                    result, raw = _visit(page, adapter, product, deadline)
-                    result.duration_ms += first_ms + RELOAD_PAUSE_MS
-                site_result.pages.append(result)
-                if raw_sink is not None:
-                    raw_sink(product, raw, result)
-                if diagnostics_dir and (always_diagnose or result.status != STATUS_OK):
-                    _save_diagnostics(page, Path(diagnostics_dir), f"{site}-{product.product_id}", raw)
+                site_result.pages.append(_scan_product(context, site, adapter, product, deadline, diagnostics_dir, always_diagnose, raw_sink))
         finally:
             context.close()
         results.append(site_result)
