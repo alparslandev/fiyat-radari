@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.pytest_cache/
+tani/
+spike-out/
+spike-all/
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars

@@ -1,0 +1,370 @@
+{
+ "challenge": null,
+ "title": "Apple iPhone 17 Pro 256GB Gümüş - Fiyatı",
+ "product": {
+  "id": 985256847,
+  "name": "iPhone 17 Pro 256GB Gümüş",
+  "inStock": true,
+  "attributes": [
+   [
+    "Garanti Tipi",
+    "Apple Türkiye Garantili"
+   ],
+   [
+    "Dahili Hafıza",
+    "256 GB"
+   ],
+   [
+    "Kamera Çözünürlüğü",
+    "20 MP ve üstü"
+   ],
+   [
+    "Mobil Bağlantı Hızı",
+    "5G"
+   ],
+   [
+    "CPU Aralık",
+    "2.0-2.5 GHz"
+   ],
+   [
+    "Ana Kamera Çözünürlük Aralığı",
+    "40 - 60 MP"
+   ],
+   [
+    "Ekran Çözünürlüğü",
+    "FHD+"
+   ],
+   [
+    "Parmak İzi Okuyucu",
+    "Var"
+   ],
+   [
+    "Suya/Toza Dayanıklılık",
+    "Var"
+   ],
+   [
+    "RAM Kapasitesi",
+    "12 GB"
+   ],
+   [
+    "Ekran Boyutu",
+    "6 - 8 inç"
+   ],
+   [
+    "Pil Gücü (mAh)",
+    "3000 - 4000"
+   ],
+   [
+    "Cep Telefonu Modeli",
+    "iPhone 17 Pro"
+   ],
+   [
+    "Ön Kamera Çözünürlüğü",
+    "14 - 20 MP"
+   ],
+   [
+    "Ön Kamera Çözünürlük Aralığı",
+    "15 - 20 MP"
+   ],
+   [
+    "Arka Kamera Sayısı",
+    "3"
+   ],
+   [
+    "Kablosuz Şarj",
+    "Var"
+   ],
+   [
+    "İşletim Sistemi",
+    "iOS"
+   ],
+   [
+    "Garanti Süresi",
+    "2 Yıl"
+   ],
+   [
+    "Ekran Boyut Aralığı",
+    "6'' - 6.5''"
+   ],
+   [
+    "Yüz Tanıma",
+    "Var"
+   ],
+   [
+    "Görüntü Teknolojisi",
+    "OLED"
+   ],
+   [
+    "Ekran Teknolojisi",
+    "FHD+"
+   ],
+   [
+    "Ekran Cinsi",
+    "OLED"
+   ],
+   [
+    "Ön Kamera Sayısı",
+    "1"
+   ],
+   [
+    "Dokunmatik Ekran",
+    "Var"
+   ],
+   [
+    "Çift Hat",
+    "Var"
+   ],
+   [
+    "Batarya Kapasitesi Aralığı",
+    "3500-4000 mAh"
+   ],
+   [
+    "Şarj Hızı",
+    "20-40 W"
+   ],
+   [
+    "Kulaklık Girişi",
+    "USB Type-C"
+   ],
+   [
+    "Ekran Yenileme Hızı",
+    "120 Hz"
+   ],
+   [
+    "Radio",
+    "Yok"
+   ],
+   [
+    "Şarj Girişi",
+    "USB Type-C"
+   ],
+   [
+    "NFC",
+    "Var"
+   ],
+   [
+    "Renk",
+    "Gümüş"
+   ],
+   [
+    "Görüntülü Konuşma",
+    "Var"
+   ],
+   [
+    "Video Kayıt Çözünürlüğü",
+    "2160p (Ultra HD) 4K"
+   ],
+   [
+    "Yapay Zeka",
+    "Var"
+   ],
+   [
+    "Menşei",
+    "US"
+   ],
+   [
+    "Tamir Edilebilirlik",
+    "Yetkili Servis ile Tamiri Gerekir."
+   ]
+  ]
+ },
+ "winner": {
+  "id": 968,
+  "name": "Trendyol",
+  "score": 9.3,
+  "price": {
+   "selling": 105913.12,
+   "discounted": 105913.12,
+   "coupon": 105913.12,
+   "plus": 105913.12,
+   "noLimit": 105913.12,
+   "original": 107126.33
+  },
+  "inStock": true,
+  "sellable": true,
+  "barcode": "195950627206",
+  "isFlash": false,
+  "isRunningOut": false,
+  "runningOutQuantity": 0
+ },
+ "others": [
+  {
+   "id": 738552,
+   "name": "TEKNOLOJİ MOBİL STORE",
+   "score": 9.4,
+   "price": {
+    "selling": 118999,
+    "discounted": 118999,
+    "coupon": 118999,
+    "plus": 118999,
+    "noLimit": 118999,
+    "original": 118999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=738552&sav=true"
+  },
+  {
+   "id": 125540,
+   "name": "Alsambunu",
+   "score": 9.6,
+   "price": {
+    "selling": 119939,
+    "discounted": 119939,
+    "coupon": 119939,
+    "plus": 119939,
+    "noLimit": 119939,
+    "original": 119939
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=125540&sav=true"
+  },
+  {
+   "id": 588741,
+   "name": "EGE TEKNO",
+   "score": 9.1,
+   "price": {
+    "selling": 119949,
+    "discounted": 119949,
+    "coupon": 119949,
+    "plus": 119949,
+    "noLimit": 119949,
+    "original": 119949
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=588741&sav=true"
+  },
+  {
+   "id": 104870,
+   "name": "BittiBitiyor",
+   "score": 9.5,
+   "price": {
+    "selling": 119999,
+    "discounted": 119999,
+    "coupon": 119999,
+    "plus": 119999,
+    "noLimit": 119999,
+    "original": 119999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=104870&sav=true"
+  },
+  {
+   "id": 787811,
+   "name": "RCM GRUP",
+   "score": 9.4,
+   "price": {
+    "selling": 119999,
+    "discounted": 119999,
+    "coupon": 119999,
+    "plus": 119999,
+    "noLimit": 119999,
+    "original": 119999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=787811&sav=true"
+  },
+  {
+   "id": 107032,
+   "name": "Troy Apple Yetkili Satıcı",
+   "score": 9.2,
+   "price": {
+    "selling": 119999,
+    "discounted": 119999,
+    "coupon": 119999,
+    "plus": 119999,
+    "noLimit": 119999,
+    "original": 119999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=107032&sav=true"
+  },
+  {
+   "id": 116313,
+   "name": "TekCep",
+   "score": 9.4,
+   "price": {
+    "selling": 124739,
+    "discounted": 124739,
+    "coupon": 124739,
+    "plus": 124739,
+    "noLimit": 124739,
+    "original": 124739
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=116313&sav=true"
+  },
+  {
+   "id": 123425,
+   "name": "Yirmidört",
+   "score": 9.3,
+   "price": {
+    "selling": 125000,
+    "discounted": 125000,
+    "coupon": 125000,
+    "plus": 125000,
+    "noLimit": 125000,
+    "original": 125000
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=123425&sav=true"
+  },
+  {
+   "id": 359138,
+   "name": "Amanoslar Ev Concept",
+   "score": 0,
+   "price": {
+    "selling": 129990,
+    "discounted": 129990,
+    "coupon": 129990,
+    "plus": 129990,
+    "noLimit": 129990,
+    "original": 129990
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=359138&sav=true"
+  },
+  {
+   "id": 487177,
+   "name": "BT Tekno Market",
+   "score": 9,
+   "price": {
+    "selling": 139999,
+    "discounted": 139999,
+    "coupon": 139999,
+    "plus": 139999,
+    "noLimit": 139999,
+    "original": 139999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=487177&sav=true"
+  },
+  {
+   "id": 164784,
+   "name": "Ceptemax",
+   "score": 9.5,
+   "price": {
+    "selling": 144499,
+    "discounted": 144499,
+    "coupon": 144499,
+    "plus": 144499,
+    "noLimit": 144499,
+    "original": 144499
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-gumus-p-985256847?boutiqueId=61&merchantId=164784&sav=true"
+  }
+ ],
+ "http_status": 200,
+ "final_url": "https://www.trendyol.com/apple/iphone-17-pro-256gb-gumus-p-985256847"
+}

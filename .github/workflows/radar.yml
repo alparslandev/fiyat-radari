@@ -1,0 +1,48 @@
+name: Fiyat radari
+
+on:
+  workflow_dispatch:
+    inputs:
+      dispatched_at:
+        description: Worker tetikleme zamani
+        required: false
+        default: ""
+  schedule:
+    - cron: "13,43 * * * *"
+
+concurrency:
+  group: radar
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  tara:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Tara
+        run: |
+          command -v xvfb-run || (sudo apt-get update && sudo apt-get install -y xvfb)
+          xvfb-run -a -s "-screen 0 1920x1080x24" python -m radar run
+        env:
+          RADAR_DISPATCHED_AT: ${{ inputs.dispatched_at }}
+          RADAR_INGEST_URL: ${{ vars.RADAR_INGEST_URL }}
+          RADAR_INGEST_TOKEN: ${{ secrets.RADAR_INGEST_TOKEN }}
+      - if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: tani-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tani/
+          retention-days: 3
+          if-no-files-found: ignore

@@ -1,0 +1,62 @@
+{
+ "challenge": null,
+ "title": "Apple iPhone 17 Pro 256 GB Abis Fiyatı - Taksit Seçenekleri",
+ "jsonld": {
+  "name": "Apple iPhone 17 Pro 256 GB",
+  "sku": "HBCV00009Z3YPK",
+  "gtin": "0195950627602",
+  "color": "Abis",
+  "price": "105399.00",
+  "availability": "https://schema.org/InStock"
+ },
+ "current": {
+  "merchantId": "e750130c-d0ff-469f-8767-66a63af8ea0c",
+  "merchantName": "Hepsiburada",
+  "listingId": "4bc1275c-9ba3-4f88-8c03-93beb3d127de",
+  "prices": [
+   {
+    "value": 105399,
+    "discountRate": 0
+   }
+  ],
+  "isSalable": null,
+  "minimumPrice": null,
+  "originalPrice": null,
+  "rating": null
+ },
+ "listings": [
+  {
+   "merchantId": "b453056f-4f1a-4f15-b4b8-502e36d67680",
+   "merchantName": "MARTEKNOLOJİ",
+   "listingId": "520082e1-b3af-4de2-aee2-d4e053a05840",
+   "prices": [
+    {
+     "value": 108692.07,
+     "discountRate": 0
+    }
+   ],
+   "isSalable": true,
+   "minimumPrice": 107639.08,
+   "originalPrice": 108692.07,
+   "rating": 9.6
+  },
+  {
+   "merchantId": "1da370aa-3e19-4ddc-8520-f5b1cf9e1066",
+   "merchantName": "Troy Apple",
+   "listingId": "e9163b04-7d2c-4bec-a5a7-67e12265070d",
+   "prices": [
+    {
+     "value": 109528.17,
+     "discountRate": 0
+    }
+   ],
+   "isSalable": true,
+   "minimumPrice": 108467.08,
+   "originalPrice": 109528.17,
+   "rating": 9.7
+  }
+ ],
+ "warranty": "Apple Türkiye Garantili",
+ "http_status": 200,
+ "final_url": "https://www.hepsiburada.com/apple-iphone-17-pro-256-gb-abis-p-HBCV00009Z3YPK"
+}

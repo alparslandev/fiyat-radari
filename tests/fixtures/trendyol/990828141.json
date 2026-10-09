@@ -1,0 +1,354 @@
+{
+ "challenge": null,
+ "title": "Apple iPhone 17 Pro, 256GB, 5G, Deep Blue - Fiyatı",
+ "product": {
+  "id": 990828141,
+  "name": "iPhone 17 Pro, 256GB, 5G, Deep Blue",
+  "inStock": true,
+  "attributes": [
+   [
+    "Garanti Tipi",
+    "Apple Türkiye Garantili"
+   ],
+   [
+    "Dahili Hafıza",
+    "256 GB"
+   ],
+   [
+    "Kamera Çözünürlüğü",
+    "20 MP ve üstü"
+   ],
+   [
+    "Mobil Bağlantı Hızı",
+    "5G"
+   ],
+   [
+    "Ana Kamera Çözünürlük Aralığı",
+    "40 - 60 MP"
+   ],
+   [
+    "CPU Aralık",
+    "2.0-2.5 GHz"
+   ],
+   [
+    "Ekran Çözünürlüğü",
+    "FHD+"
+   ],
+   [
+    "Parmak İzi Okuyucu",
+    "Var"
+   ],
+   [
+    "Suya/Toza Dayanıklılık",
+    "Var"
+   ],
+   [
+    "RAM Kapasitesi",
+    "12 GB"
+   ],
+   [
+    "Ekran Boyutu",
+    "6 - 8 inç"
+   ],
+   [
+    "Pil Gücü (mAh)",
+    "3000 - 4000"
+   ],
+   [
+    "Cep Telefonu Modeli",
+    "iPhone 17 Pro"
+   ],
+   [
+    "Ön Kamera Çözünürlüğü",
+    "14 - 20 MP"
+   ],
+   [
+    "Ön Kamera Çözünürlük Aralığı",
+    "15 - 20 MP"
+   ],
+   [
+    "Arka Kamera Sayısı",
+    "3"
+   ],
+   [
+    "Kablosuz Şarj",
+    "Var"
+   ],
+   [
+    "İşletim Sistemi",
+    "iOS"
+   ],
+   [
+    "Garanti Süresi",
+    "2 Yıl"
+   ],
+   [
+    "Ekran Boyut Aralığı",
+    "6'' - 6.5''"
+   ],
+   [
+    "Yüz Tanıma",
+    "Var"
+   ],
+   [
+    "Görüntü Teknolojisi",
+    "OLED"
+   ],
+   [
+    "Ekran Teknolojisi",
+    "FHD+"
+   ],
+   [
+    "Ekran Cinsi",
+    "OLED"
+   ],
+   [
+    "Ön Kamera Sayısı",
+    "1"
+   ],
+   [
+    "Dokunmatik Ekran",
+    "Var"
+   ],
+   [
+    "Çift Hat",
+    "Var"
+   ],
+   [
+    "Batarya Kapasitesi Aralığı",
+    "3500-4000 mAh"
+   ],
+   [
+    "Şarj Hızı",
+    "20-40 W"
+   ],
+   [
+    "Kulaklık Girişi",
+    "USB Type-C"
+   ],
+   [
+    "Ekran Yenileme Hızı",
+    "120 Hz"
+   ],
+   [
+    "Radio",
+    "Yok"
+   ],
+   [
+    "Şarj Girişi",
+    "USB Type-C"
+   ],
+   [
+    "NFC",
+    "Var"
+   ],
+   [
+    "Renk",
+    "Mavi"
+   ],
+   [
+    "Görüntülü Konuşma",
+    "Var"
+   ],
+   [
+    "Video Kayıt Çözünürlüğü",
+    "2160p (Ultra HD) 4K"
+   ],
+   [
+    "Yapay Zeka",
+    "Var"
+   ],
+   [
+    "Menşei",
+    "US"
+   ],
+   [
+    "Tamir Edilebilirlik",
+    "Yetkili Servis ile Tamiri Gerekir."
+   ]
+  ]
+ },
+ "winner": {
+  "id": 968,
+  "name": "Trendyol",
+  "score": 9.3,
+  "price": {
+   "selling": 105924.02,
+   "discounted": 105924.02,
+   "coupon": 105924.02,
+   "plus": 105924.02,
+   "noLimit": 105924.02,
+   "original": 107399
+  },
+  "inStock": true,
+  "sellable": true,
+  "barcode": "195950627602",
+  "isFlash": false,
+  "isRunningOut": false,
+  "runningOutQuantity": 0
+ },
+ "others": [
+  {
+   "id": 522362,
+   "name": "Referans Bilişim",
+   "score": 9,
+   "price": {
+    "selling": 118989,
+    "discounted": 118989,
+    "coupon": 118989,
+    "plus": 118989,
+    "noLimit": 118989,
+    "original": 118989
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=522362&sav=true"
+  },
+  {
+   "id": 738552,
+   "name": "TEKNOLOJİ MOBİL STORE",
+   "score": 9.4,
+   "price": {
+    "selling": 118999,
+    "discounted": 118999,
+    "coupon": 118999,
+    "plus": 118999,
+    "noLimit": 118999,
+    "original": 118999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=738552&sav=true"
+  },
+  {
+   "id": 116313,
+   "name": "TekCep",
+   "score": 9.4,
+   "price": {
+    "selling": 119399,
+    "discounted": 119399,
+    "coupon": 119399,
+    "plus": 119399,
+    "noLimit": 119399,
+    "original": 132259
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=116313&sav=true"
+  },
+  {
+   "id": 104870,
+   "name": "BittiBitiyor",
+   "score": 9.5,
+   "price": {
+    "selling": 119979,
+    "discounted": 119979,
+    "coupon": 119979,
+    "plus": 119979,
+    "noLimit": 119979,
+    "original": 119979
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=104870&sav=true"
+  },
+  {
+   "id": 125540,
+   "name": "Alsambunu",
+   "score": 9.6,
+   "price": {
+    "selling": 119999,
+    "discounted": 119999,
+    "coupon": 119999,
+    "plus": 119999,
+    "noLimit": 119999,
+    "original": 119999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=125540&sav=true"
+  },
+  {
+   "id": 787811,
+   "name": "RCM GRUP",
+   "score": 9.4,
+   "price": {
+    "selling": 119999,
+    "discounted": 119999,
+    "coupon": 119999,
+    "plus": 119999,
+    "noLimit": 119999,
+    "original": 119999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=787811&sav=true"
+  },
+  {
+   "id": 107032,
+   "name": "Troy Apple Yetkili Satıcı",
+   "score": 9.2,
+   "price": {
+    "selling": 119999,
+    "discounted": 119999,
+    "coupon": 119999,
+    "plus": 119999,
+    "noLimit": 119999,
+    "original": 119999
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=107032&sav=true"
+  },
+  {
+   "id": 123425,
+   "name": "Yirmidört",
+   "score": 9.3,
+   "price": {
+    "selling": 122000,
+    "discounted": 122000,
+    "coupon": 122000,
+    "plus": 122000,
+    "noLimit": 122000,
+    "original": 122000
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=123425&sav=true"
+  },
+  {
+   "id": 359138,
+   "name": "Amanoslar Ev Concept",
+   "score": 0,
+   "price": {
+    "selling": 129990,
+    "discounted": 129990,
+    "coupon": 129990,
+    "plus": 129990,
+    "noLimit": 129990,
+    "original": 129990
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=359138&sav=true"
+  },
+  {
+   "id": 164784,
+   "name": "Ceptemax",
+   "score": 9.5,
+   "price": {
+    "selling": 144499,
+    "discounted": 144499,
+    "coupon": 144499,
+    "plus": 144499,
+    "noLimit": 144499,
+    "original": 144499
+   },
+   "inStock": true,
+   "sellable": true,
+   "url": "/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141?boutiqueId=61&merchantId=164784&sav=true"
+  }
+ ],
+ "http_status": 200,
+ "final_url": "https://www.trendyol.com/apple/iphone-17-pro-256gb-5g-deep-blue-p-990828141"
+}

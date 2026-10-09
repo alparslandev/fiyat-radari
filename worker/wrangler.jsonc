@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fiyat-radari",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "triggers": {
+    "crons": ["* * * * *"]
+  },
+  "kv_namespaces": [
+    {
+      "binding": "RADAR",
+      "id": "KV_NAMESPACE_ID"
+    }
+  ],
+  "vars": {
+    "GH_REPO": "alparslandev/fiyat-radari",
+    "GH_WORKFLOW": "radar.yml",
+    "GH_REF": "main",
+    "MAIL_FROM": "Fiyat Radarı <radar@devdiscipline.com>"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

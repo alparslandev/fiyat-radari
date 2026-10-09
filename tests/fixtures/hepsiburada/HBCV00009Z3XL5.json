@@ -1,0 +1,66 @@
+{
+ "challenge": null,
+ "title": "Apple iPhone 17 Pro 256 GB Kozmik Turuncu Fiyatı",
+ "jsonld": {
+  "name": "Apple iPhone 17 Pro 256 GB Kozmik",
+  "sku": "HBCV00009Z3XL5",
+  "gtin": "0195950627404",
+  "color": "Kozmik Turuncu",
+  "price": "104899.00",
+  "availability": "https://schema.org/InStock"
+ },
+ "current": {
+  "merchantId": "e750130c-d0ff-469f-8767-66a63af8ea0c",
+  "merchantName": "Hepsiburada",
+  "listingId": "6366df6c-0d8c-4a27-ba0c-bd0b63bdc445",
+  "prices": [
+   {
+    "value": 104899,
+    "discountRate": 0
+   }
+  ],
+  "isSalable": null,
+  "minimumPrice": null,
+  "originalPrice": null,
+  "rating": null
+ },
+ "listings": [
+  {
+   "merchantId": "1da370aa-3e19-4ddc-8520-f5b1cf9e1066",
+   "merchantName": "Troy Apple",
+   "listingId": "fac62ea6-3cb1-4edb-8a20-9b8faca26068",
+   "prices": [
+    {
+     "value": 108467.08,
+     "discountRate": 0
+    },
+    {
+     "value": 106075.08,
+     "discountRate": 2
+    }
+   ],
+   "isSalable": true,
+   "minimumPrice": 108467.08,
+   "originalPrice": 106075.08,
+   "rating": 9.7
+  },
+  {
+   "merchantId": "79b75dd3-2166-4dbf-9af8-a1bf3485c342",
+   "merchantName": "FIRATİLETİŞİM",
+   "listingId": "4f2e5a31-1486-4ba5-bc1f-733e33d7d7df",
+   "prices": [
+    {
+     "value": 108559.08,
+     "discountRate": 0
+    }
+   ],
+   "isSalable": true,
+   "minimumPrice": 108559.08,
+   "originalPrice": 108559.08,
+   "rating": 9.8
+  }
+ ],
+ "warranty": "Apple Türkiye Garantili",
+ "http_status": 200,
+ "final_url": "https://www.hepsiburada.com/apple-iphone-17-pro-256-gb-kozmik-turuncu-p-HBCV00009Z3XL5"
+}

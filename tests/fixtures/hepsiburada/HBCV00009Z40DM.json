@@ -1,0 +1,66 @@
+{
+ "challenge": null,
+ "title": "Apple iPhone 17 Pro 256 GB Gümüş Fiyatı - Taksit Seçenekleri",
+ "jsonld": {
+  "name": "Apple iPhone 17 Pro 256 GB",
+  "sku": "HBCV00009Z40DM",
+  "gtin": "0195950627206",
+  "color": "Gümüş",
+  "price": "107999.00",
+  "availability": "https://schema.org/InStock"
+ },
+ "current": {
+  "merchantId": "e750130c-d0ff-469f-8767-66a63af8ea0c",
+  "merchantName": "Hepsiburada",
+  "listingId": "5675a96c-dd2c-44a9-bdf8-40447744d603",
+  "prices": [
+   {
+    "value": 107999,
+    "discountRate": 0
+   }
+  ],
+  "isSalable": null,
+  "minimumPrice": null,
+  "originalPrice": null,
+  "rating": null
+ },
+ "listings": [
+  {
+   "merchantId": "3b723e54-69f8-461d-bfce-547f01cb86ac",
+   "merchantName": "Çetin Grup",
+   "listingId": "716ac768-1aa2-4b7d-8dc6-99c1669d3617",
+   "prices": [
+    {
+     "value": 110743,
+     "discountRate": 0
+    }
+   ],
+   "isSalable": true,
+   "minimumPrice": 108560,
+   "originalPrice": 110743,
+   "rating": 9.8
+  },
+  {
+   "merchantId": "875723be-9dad-4cbc-a2f4-b59327651faa",
+   "merchantName": "BittiBitiyor",
+   "listingId": "3fdff410-2102-488d-a42f-4e70fcef6c62",
+   "prices": [
+    {
+     "value": 112055.08,
+     "discountRate": 0
+    },
+    {
+     "value": 110742.06,
+     "discountRate": 1
+    }
+   ],
+   "isSalable": true,
+   "minimumPrice": 112055.08,
+   "originalPrice": 110742.06,
+   "rating": 9.6
+  }
+ ],
+ "warranty": "Apple Türkiye Garantili",
+ "http_status": 200,
+ "final_url": "https://www.hepsiburada.com/apple-iphone-17-pro-256-gb-gumus-p-HBCV00009Z40DM"
+}
