@@ -3,7 +3,6 @@ import type { Env, RadarKv } from '../src/env'
 import { perSite, type IngestPayload, type Offer, type Site, type SiteReport, type SiteStatus } from '../src/payload'
 import { BUCKET_MS, MIN_BUCKETS, type RuleState } from '../src/rule'
 
-export const NTFY_URL = 'https://ntfy.sh/'
 export const RESEND_URL = 'https://api.resend.com/emails'
 export const GITHUB_DISPATCH_URL =
   'https://api.github.com/repos/alparslandev/fiyat-radari/actions/workflows/radar.yml/dispatches'
@@ -46,8 +45,6 @@ export function testEnv(overrides: Partial<Omit<Env, 'RADAR'>> = {}): TestEnv {
     GH_TOKEN: 'ghp_test',
     INGEST_TOKEN: 'gizli-anahtar',
     RESEND_API_KEY: 're_test',
-    NTFY_TOPIC: 'radar-test',
-    NTFY_TOKEN: 'tk_test',
     MAIL_TO: 'alp@example.com',
     ...overrides,
   }
@@ -87,7 +84,7 @@ export function restoreFetch(): void {
 export function answerEverything(call: RecordedCall): Response {
   if (call.url === GITHUB_DISPATCH_URL) return new Response(null, { status: 204 })
   if (call.url === RESEND_URL) return Response.json({ id: 'email-1' })
-  return Response.json({ id: 'ntfy-1' })
+  return new Response(null, { status: 404 })
 }
 
 export function callsTo(calls: RecordedCall[], url: string): RecordedCall[] {
@@ -97,15 +94,6 @@ export function callsTo(calls: RecordedCall[], url: string): RecordedCall[] {
 export function bodyOf<T>(call: RecordedCall | undefined): T {
   if (!call) throw new Error('beklenen istek yok')
   return JSON.parse(call.body) as T
-}
-
-export interface NtfyBody {
-  topic: string
-  title: string
-  message: string
-  priority: number
-  click?: string
-  actions?: { action: string; label: string; url: string }[]
 }
 
 export interface ResendBody {

@@ -13,11 +13,18 @@
       "id": "74e0c2f33222428c8396a5f4b5f927ae"
     }
   ],
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "destination_address": "alp.develioglu@gmail.com"
+    }
+  ],
   "vars": {
     "GH_REPO": "alparslandev/fiyat-radari",
     "GH_WORKFLOW": "radar.yml",
     "GH_REF": "main",
-    "MAIL_FROM": "Fiyat Radarı <radar@devdiscipline.com>"
+    "MAIL_FROM": "Fiyat Radarı <bildirim@yarisradari.com>",
+    "MAIL_TO": "alp.develioglu@gmail.com"
   },
   "observability": {
     "enabled": true

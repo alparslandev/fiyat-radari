@@ -7,14 +7,12 @@ import {
   bodyOf,
   callsTo,
   GITHUB_DISPATCH_URL,
-  NTFY_URL,
   offer,
   RESEND_URL,
   restoreFetch,
   silenceConsole,
   stubFetch,
   testEnv,
-  type NtfyBody,
   type RecordedCall,
   type ResendBody,
   type TestEnv,
@@ -85,27 +83,23 @@ describe('dispatch', () => {
     })
 
     for (const minute of ['10:01', '10:16']) await runScheduled(env, turkey(`2026-10-09T${minute}`))
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(0)
+    expect(callsTo(calls, RESEND_URL)).toHaveLength(0)
 
     await runScheduled(env, turkey('2026-10-09T10:31'))
     await runScheduled(env, turkey('2026-10-09T10:46'))
-    const alerts = callsTo(calls, NTFY_URL)
+    const alerts = callsTo(calls, RESEND_URL)
     expect(alerts).toHaveLength(1)
-    expect(bodyOf<NtfyBody>(alerts[0])).toMatchObject({ title: 'Fiyat Radarı: GitHub işi başlatılamıyor', priority: 4 })
-    expect(bodyOf<NtfyBody>(alerts[0]).message).toContain('HTTP 401')
-    expect(bodyOf<ResendBody>(callsTo(calls, RESEND_URL)[0]).text).toContain(
+    expect(bodyOf<ResendBody>(alerts[0]).subject).toBe('Fiyat Radarı: GitHub işi başlatılamıyor')
+    expect(bodyOf<ResendBody>(alerts[0]).text).toContain(
       'GitHub Actions işi üst üste 3 kez başlatılamadı.',
     )
     expect(env.RADAR.read<CronState>(CRON_KEY).dispatch.failures).toBe(4)
 
     githubStatus = 204
     await runScheduled(env, turkey('2026-10-09T11:01'))
-    const all = callsTo(calls, NTFY_URL)
+    const all = callsTo(calls, RESEND_URL)
     expect(all).toHaveLength(2)
-    expect(bodyOf<NtfyBody>(all[1])).toMatchObject({
-      title: 'Fiyat Radarı: GitHub işi yeniden başlatılıyor',
-      priority: 3,
-    })
+    expect(bodyOf<ResendBody>(all[1]).subject).toBe('Fiyat Radarı: GitHub işi yeniden başlatılıyor')
     expect(env.RADAR.read<CronState>(CRON_KEY).dispatch).toEqual(HEALTHY_STATE)
   })
 
@@ -114,7 +108,7 @@ describe('dispatch', () => {
     const calls = stubFetch(answerEverything)
     for (const minute of ['10:01', '10:16', '10:31']) await runScheduled(env, turkey(`2026-10-09T${minute}`))
     expect(callsTo(calls, GITHUB_DISPATCH_URL)).toHaveLength(0)
-    expect(bodyOf<NtfyBody>(callsTo(calls, NTFY_URL)[0]).message).toContain('GH_TOKEN tanımlı değil')
+    expect(bodyOf<ResendBody>(callsTo(calls, RESEND_URL)[0]).text).toContain('GH_TOKEN tanımlı değil')
   })
 })
 
@@ -133,25 +127,19 @@ describe('watchdog', () => {
     seedIngest(env, turkey('2026-10-09T10:00'))
 
     await runScheduled(env, turkey('2026-10-09T10:35'))
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(0)
+    expect(callsTo(calls, RESEND_URL)).toHaveLength(0)
 
     await runScheduled(env, turkey('2026-10-09T10:36'))
     await runScheduled(env, turkey('2026-10-09T10:37'))
-    const alerts = callsTo(calls, NTFY_URL)
+    const alerts = callsTo(calls, RESEND_URL)
     expect(alerts).toHaveLength(1)
-    expect(bodyOf<NtfyBody>(alerts[0])).toEqual({
-      topic: 'radar-test',
-      title: 'Fiyat Radarı: veri gelmiyor',
-      message: 'Son veri: 9 Eki 10:00 (36 dakika önce)',
-      priority: 4,
-    })
-    expect(callsTo(calls, RESEND_URL)).toHaveLength(1)
+    expect(bodyOf<ResendBody>(alerts[0]).subject).toBe('Fiyat Radarı: veri gelmiyor')
 
     seedIngest(env, turkey('2026-10-09T10:37') + 30_000)
     await runScheduled(env, turkey('2026-10-09T10:38'))
-    const all = callsTo(calls, NTFY_URL)
+    const all = callsTo(calls, RESEND_URL)
     expect(all).toHaveLength(2)
-    expect(bodyOf<NtfyBody>(all[1])).toMatchObject({ title: 'Fiyat Radarı: veri yeniden geliyor', priority: 3 })
+    expect(bodyOf<ResendBody>(all[1]).subject).toBe('Fiyat Radarı: veri yeniden geliyor')
     expect(env.RADAR.read<CronState>(CRON_KEY).watchdog).toEqual(HEALTHY_STATE)
     expect(env.RADAR.writes.every((key) => key === CRON_KEY)).toBe(true)
   })
@@ -162,9 +150,9 @@ describe('watchdog', () => {
     seedIngest(env, turkey('2026-10-31T23:50'))
 
     await runScheduled(env, turkey('2026-11-01T00:24'))
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(0)
+    expect(callsTo(calls, RESEND_URL)).toHaveLength(0)
     await runScheduled(env, turkey('2026-11-01T00:27'))
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(1)
+    expect(callsTo(calls, RESEND_URL)).toHaveLength(1)
   })
 })
 
@@ -182,7 +170,6 @@ describe('digest', () => {
     await runScheduled(env, turkey('2026-10-09T09:01'))
     await runScheduled(env, turkey('2026-10-09T09:02'))
     expect(digests()).toHaveLength(1)
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(0)
     expect(bodyOf<ResendBody>(digests()[0]).subject).toBe(
       'Fiyat Radarı günlük özet: en ucuz 103.869 TL (Amazon, Kozmik Turuncu)',
     )

@@ -1,6 +1,6 @@
 # Fiyat Radarı
 
-Amazon.com.tr, Trendyol ve Hepsiburada'da iPhone 17 Pro 256 GB fiyatlarını izler. Apple Türkiye garantili en ucuz teklif olağan fiyatın belirgin biçimde altına inince telefona ntfy bildirimi ve mail gönderir.
+Amazon.com.tr, Trendyol ve Hepsiburada'da iPhone 17 Pro 256 GB fiyatlarını izler. Apple Türkiye garantili en ucuz teklif olağan fiyatın belirgin biçimde altına inince mail gönderir.
 
 ## Nasıl çalışır
 
@@ -31,10 +31,8 @@ Kurallar `radar/policy.py`, izlenen sayfalar `radar/catalog.py` içinde.
 
 1. **GitHub reposu**: public bir repo aç (`fiyat-radari`) ve bu klasörü push et. Public repoda Actions dakikaları ücretsiz.
 2. **Erişim testi**: Actions sekmesinde "Erisim testi" iş akışını çalıştır (ayrıca her gün 03:00, 13:00 ve 21:00'de kendiliğinden çalışır). Sonuç tablosu `ozet` işinin özet sayfasında. Her site için en az bir yapılandırmanın makinelerin büyük çoğunluğunda geçmesi gerekir. Test bitince `spike.yml` ve `radar/spike.py` silinebilir.
-3. **ntfy**: telefona ntfy uygulamasını kur, ntfy.sh'de ücretsiz hesap aç, bir erişim token'ı oluştur ve uzun, rastgele bir konu adına abone ol (konu adı şifre gibidir).
-4. **Resend**: yalnızca gönderim yetkili ve devdiscipline.com alan adıyla sınırlı yeni bir API anahtarı oluştur.
-5. **GitHub token**: yalnızca bu repoya erişen, Actions izni "Read and write" olan ince ayarlı (fine-grained) bir kişisel erişim token'ı oluştur.
-6. **Worker**:
+3. **GitHub token**: yalnızca bu repoya erişen, Actions izni "Read and write" olan ince ayarlı (fine-grained) bir kişisel erişim token'ı oluştur.
+4. **Worker**:
    ```sh
    cd worker
    bun install
@@ -44,10 +42,6 @@ Kurallar `radar/policy.py`, izlenen sayfalar `radar/catalog.py` içinde.
    ```sh
    bunx wrangler secret put GH_TOKEN
    bunx wrangler secret put INGEST_TOKEN
-   bunx wrangler secret put RESEND_API_KEY
-   bunx wrangler secret put NTFY_TOPIC
-   bunx wrangler secret put NTFY_TOKEN
-   bunx wrangler secret put MAIL_TO
    bun run deploy
    ```
    `INGEST_TOKEN` için uzun, rastgele bir değer üret (`openssl rand -hex 32`).

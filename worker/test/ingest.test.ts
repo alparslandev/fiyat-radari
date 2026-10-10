@@ -7,7 +7,6 @@ import {
   bodyOf,
   callsTo,
   ingestRequest,
-  NTFY_URL,
   offer,
   payloadWith,
   RESEND_URL,
@@ -16,7 +15,6 @@ import {
   stubFetch,
   testEnv,
   warmBuckets,
-  type NtfyBody,
   type ResendBody,
   type TestEnv,
 } from './support'
@@ -148,7 +146,7 @@ describe('handleIngest', () => {
     expect(calls).toHaveLength(0)
   })
 
-  test('a deal sends exactly one ntfy push and one Resend mail with Turkish text intact', async () => {
+  test('a deal sends exactly one mail with Turkish text intact', async () => {
     const env = testEnv()
     seedWarmState(env)
     const calls = stubFetch(answerEverything)
@@ -161,30 +159,8 @@ describe('handleIngest', () => {
     expect(result.normal).toBe(105_000)
     expect(result.health).toEqual({ trendyol: 'none', hepsiburada: 'none', amazon: 'none' })
 
-    expect(calls).toHaveLength(2)
-    const pushes = callsTo(calls, NTFY_URL)
     const mails = callsTo(calls, RESEND_URL)
-    expect(pushes).toHaveLength(1)
     expect(mails).toHaveLength(1)
-
-    expect(pushes[0]?.body).toContain('Olağan fiyatın 3.501 TL altında, kuponla')
-    expect(bodyOf<NtfyBody>(pushes[0])).toEqual({
-      topic: 'radar-test',
-      title: 'iPhone 17 Pro 256 GB: 101.499 TL',
-      message: [
-        'Trendyol, Kozmik Turuncu',
-        'Satıcı: Trendyol (9,3)',
-        'Olağan fiyatın 3.501 TL altında, kuponla',
-        'Stokta sadece 6 adet kaldı.',
-      ].join('\n'),
-      priority: 5,
-      click: dealOffer.url,
-      actions: [
-        { action: 'view', label: "Trendyol'da aç", url: dealOffer.url },
-        { action: 'view', label: "Amazon'da aç", url: amazonOffer.url },
-      ],
-    })
-
     const mail = bodyOf<ResendBody>(mails[0])
     expect(mails[0]?.body).toContain('Bu turda veri gelmeyen siteler: Hepsiburada')
     expect(mail.subject).toBe('iPhone 17 Pro 256 GB: 101.499 TL, Trendyol, Kozmik Turuncu')
@@ -227,7 +203,7 @@ describe('handleIngest', () => {
     const response = await post(thrownEnv, dealPayload)
     expect(response.status).toBe(200)
     expect((await response.json<IngestResponse>()).deal).toBe(true)
-    expect(thrown).toHaveLength(2)
+    expect(thrown).toHaveLength(1)
     expect(thrownEnv.RADAR.read<RadarState>(STATE_KEY).notified[dealOffer.key]?.price).toBe(101_499)
 
     const failingEnv = testEnv()
@@ -251,22 +227,13 @@ describe('handleIngest', () => {
       actions.push((await response.json<IngestResponse>()).health.trendyol)
     }
     expect(actions).toEqual(['none', 'none', 'none', 'none', 'alert'])
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(1)
-    expect(bodyOf<NtfyBody>(callsTo(calls, NTFY_URL)[0])).toMatchObject({
-      title: 'Trendyol takibi çalışmıyor',
-      priority: 4,
-    })
+    expect(callsTo(calls, RESEND_URL)).toHaveLength(1)
     expect(bodyOf<ResendBody>(callsTo(calls, RESEND_URL)[0]).text).toContain(
       'Trendyol takibi üst üste 5 turdur başarısız.',
     )
 
     const recovered = await post(env, payloadWith([], {}, { observed_at: observed(75) }), at(75))
     expect((await recovered.json<IngestResponse>()).health.trendyol).toBe('recover')
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(2)
-    expect(bodyOf<NtfyBody>(callsTo(calls, NTFY_URL)[1])).toMatchObject({
-      title: 'Trendyol takibi düzeldi',
-      priority: 3,
-    })
     expect(callsTo(calls, RESEND_URL)).toHaveLength(2)
   })
   test('tolerates Amazon blocks for three hours before alerting', async () => {
@@ -283,6 +250,6 @@ describe('handleIngest', () => {
     }
     expect(actions.slice(0, -1).every((action) => action === 'none')).toBe(true)
     expect(actions.at(-1)).toBe('alert')
-    expect(callsTo(calls, NTFY_URL)).toHaveLength(1)
+    expect(callsTo(calls, RESEND_URL)).toHaveLength(1)
   })
 })

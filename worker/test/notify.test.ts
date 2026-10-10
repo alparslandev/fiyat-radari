@@ -1,15 +1,13 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
-import { retryDelayMs, sendMail, sendPush } from '../src/notify'
+import { retryDelayMs, sendMail } from '../src/notify'
 import {
   bodyOf,
   callsTo,
-  NTFY_URL,
   RESEND_URL,
   restoreFetch,
   silenceConsole,
   stubFetch,
   testEnv,
-  type NtfyBody,
   type ResendBody,
 } from './support'
 
@@ -25,48 +23,6 @@ afterEach(() => {
 })
 
 const mail = { subject: 'Trendyol takibi düzeldi', text: 'Kesinti süresi: 45 dakika', idempotencyKey: 'site-recover:x' }
-
-describe('sendPush', () => {
-  test('publishes JSON to the ntfy root with the bearer token', async () => {
-    const calls = stubFetch(() => Response.json({ id: 'n1' }))
-    const sent = await sendPush(testEnv(), {
-      title: 'iPhone 17 Pro 256 GB: 101.499 TL',
-      message: 'Trendyol, Kozmik Turuncu',
-      priority: 5,
-      click: 'https://www.trendyol.com/x',
-      actions: [{ label: "Trendyol'da aç", url: 'https://www.trendyol.com/x' }],
-    })
-
-    expect(sent).toBe(true)
-    expect(calls).toHaveLength(1)
-    expect(calls[0]?.url).toBe(NTFY_URL)
-    expect(calls[0]?.headers.get('Authorization')).toBe('Bearer tk_test')
-    expect(calls[0]?.headers.get('Content-Type')).toBe('application/json')
-    expect(calls[0]?.body).toContain('Kozmik Turuncu')
-    expect(bodyOf<NtfyBody>(calls[0])).toEqual({
-      topic: 'radar-test',
-      title: 'iPhone 17 Pro 256 GB: 101.499 TL',
-      message: 'Trendyol, Kozmik Turuncu',
-      priority: 5,
-      click: 'https://www.trendyol.com/x',
-      actions: [{ action: 'view', label: "Trendyol'da aç", url: 'https://www.trendyol.com/x' }],
-    })
-  })
-
-  test('sends without Authorization when there is no token', async () => {
-    const calls = stubFetch(() => Response.json({ id: 'n1' }))
-    await sendPush(testEnv({ NTFY_TOKEN: undefined }), { title: 'a', message: 'b', priority: 3 })
-    expect(calls[0]?.headers.get('Authorization')).toBeNull()
-    expect(bodyOf<NtfyBody>(calls[0])).toEqual({ topic: 'radar-test', title: 'a', message: 'b', priority: 3 })
-  })
-
-  test('skips when the topic is missing and reports failures as false', async () => {
-    const calls = stubFetch(() => new Response('nope', { status: 500 }))
-    expect(await sendPush(testEnv({ NTFY_TOPIC: undefined }), { title: 'a', message: 'b', priority: 3 })).toBe(false)
-    expect(calls).toHaveLength(0)
-    expect(await sendPush(testEnv(), { title: 'a', message: 'b', priority: 3 })).toBe(false)
-  })
-})
 
 describe('sendMail', () => {
   test('posts to Resend with idempotency key and user agent', async () => {
@@ -118,6 +74,34 @@ describe('sendMail', () => {
     expect(calls).toHaveLength(0)
     expect(await sendMail(testEnv(), mail)).toBe(false)
     expect(calls).toHaveLength(1)
+  })
+
+  test('sends email using Cloudflare EMAIL binding when available', async () => {
+    let captured: unknown = null
+    const mockEmail = {
+      send: async (msg: unknown) => {
+        captured = msg
+        return { messageId: 'cf-1' }
+      },
+    } as unknown as SendEmail
+    const env = { ...testEnv(), EMAIL: mockEmail }
+    expect(await sendMail(env, mail)).toBe(true)
+    expect(captured).toEqual({
+      from: { name: 'Fiyat Radarı', email: 'radar@devdiscipline.com' },
+      to: 'alp@example.com',
+      subject: 'Trendyol takibi düzeldi',
+      text: 'Kesinti süresi: 45 dakika',
+    })
+  })
+
+  test('handles Cloudflare EMAIL send error gracefully', async () => {
+    const failingEmail = {
+      send: async () => {
+        throw new Error('cf error')
+      },
+    } as unknown as SendEmail
+    const env = { ...testEnv(), EMAIL: failingEmail }
+    expect(await sendMail(env, mail)).toBe(false)
   })
 })
 

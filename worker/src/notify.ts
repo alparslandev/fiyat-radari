@@ -2,7 +2,6 @@ import type { Env } from './env'
 
 export const USER_AGENT = 'fiyat-radari/1.0'
 
-const NTFY_ENDPOINT = 'https://ntfy.sh/'
 const RESEND_ENDPOINT = 'https://api.resend.com/emails'
 const REQUEST_TIMEOUT_MS = 10_000
 const DEFAULT_RETRY_DELAY_MS = 1_000
@@ -13,14 +12,6 @@ export type PushPriority = 1 | 2 | 3 | 4 | 5
 export interface PushAction {
   label: string
   url: string
-}
-
-export interface Push {
-  title: string
-  message: string
-  priority: PushPriority
-  click?: string
-  actions?: PushAction[]
 }
 
 export interface Mail {
@@ -37,7 +28,7 @@ export interface Notice {
 }
 
 export interface Delivery {
-  priority: PushPriority
+  priority?: PushPriority
   idempotencyKey: string
   click?: string
   actions?: PushAction[]
@@ -45,39 +36,6 @@ export interface Delivery {
 
 export function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
-}
-
-export async function sendPush(env: Env, push: Push): Promise<boolean> {
-  if (!env.NTFY_TOPIC) {
-    console.warn(`[ntfy] NTFY_TOPIC tanımlı değil, bildirim atlandı: ${push.title}`)
-    return false
-  }
-  const headers: Record<string, string> = { 'Content-Type': 'application/json', 'User-Agent': USER_AGENT }
-  if (env.NTFY_TOKEN) headers.Authorization = `Bearer ${env.NTFY_TOKEN}`
-  const body = JSON.stringify({
-    topic: env.NTFY_TOPIC,
-    title: push.title,
-    message: push.message,
-    priority: push.priority,
-    ...(push.click ? { click: push.click } : {}),
-    ...(push.actions?.length
-      ? { actions: push.actions.map(({ label, url }) => ({ action: 'view', label, url })) }
-      : {}),
-  })
-  try {
-    const response = await fetch(NTFY_ENDPOINT, {
-      method: 'POST',
-      headers,
-      body,
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-    })
-    if (response.ok) return true
-    console.error(`[ntfy] gönderim başarısız (${response.status}): ${push.title}`)
-    return false
-  } catch (error) {
-    console.error(`[ntfy] gönderim hatası (${errorMessage(error)}): ${push.title}`)
-    return false
-  }
 }
 
 export function retryDelayMs(response: Response): number {
@@ -95,7 +53,28 @@ function worthRetrying(status: number): boolean {
   return status === 429 || status >= 500
 }
 
+function parseEmailSender(raw: string): EmailAddress | string {
+  const match = /^(.*?)\s*<([^>]+)>$/.exec(raw.trim())
+  return match && match[1].trim()
+    ? { name: match[1].trim(), email: match[2].trim() }
+    : raw.trim()
+}
+
 export async function sendMail(env: Env, mail: Mail): Promise<boolean> {
+  if (env.EMAIL && env.MAIL_TO && env.MAIL_FROM) {
+    try {
+      await env.EMAIL.send({
+        from: parseEmailSender(env.MAIL_FROM),
+        to: env.MAIL_TO,
+        subject: mail.subject,
+        text: mail.text,
+      })
+      return true
+    } catch (error) {
+      console.error(`[mail] Cloudflare Email gönderim hatası (${errorMessage(error)}): ${mail.subject}`)
+      return false
+    }
+  }
   if (!env.RESEND_API_KEY || !env.MAIL_TO || !env.MAIL_FROM) {
     console.warn(`[mail] RESEND_API_KEY, MAIL_TO veya MAIL_FROM tanımlı değil, e-posta atlandı: ${mail.subject}`)
     return false
@@ -131,14 +110,5 @@ export async function sendMail(env: Env, mail: Mail): Promise<boolean> {
 }
 
 export async function announce(env: Env, notice: Notice, delivery: Delivery): Promise<void> {
-  await Promise.all([
-    sendPush(env, {
-      title: notice.title,
-      message: notice.message,
-      priority: delivery.priority,
-      click: delivery.click,
-      actions: delivery.actions,
-    }),
-    sendMail(env, { subject: notice.subject, text: notice.text, idempotencyKey: delivery.idempotencyKey }),
-  ])
+  await sendMail(env, { subject: notice.subject, text: notice.text, idempotencyKey: delivery.idempotencyKey })
 }

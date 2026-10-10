@@ -5,6 +5,7 @@ export interface RadarKv {
 
 export interface Env {
   RADAR: RadarKv
+  EMAIL?: SendEmail
   GH_REPO: string
   GH_WORKFLOW: string
   GH_REF: string
@@ -12,7 +13,5 @@ export interface Env {
   GH_TOKEN?: string
   INGEST_TOKEN?: string
   RESEND_API_KEY?: string
-  NTFY_TOPIC?: string
-  NTFY_TOKEN?: string
   MAIL_TO?: string
 }
