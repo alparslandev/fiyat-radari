@@ -2,12 +2,11 @@ import { cadenceMinutes, inTurkey } from './cadence'
 import { formatOutage, type HealthState } from './health'
 import type { Notice, PushAction } from './notify'
 import { SITES, type Offer, type PriceBasis, type Site, type SiteReport, type SiteStatus } from './payload'
-import { compareOffers, MIN_BUCKETS, normalPrice, type AllTimeLow, type Deal } from './rule'
-import type { IngestRecord, RadarState, SiteSnapshot } from './state'
+import { compareOffers, normalPrice, type AllTimeLow, type Deal } from './rule'
+import type { RadarState, SiteSnapshot } from './state'
 
 const PRODUCT_NAME = 'iPhone 17 Pro 256 GB'
 const RADAR_NAME = 'Fiyat Radarı'
-const DAY_MS = 24 * 60 * 60 * 1000
 const MINUTE_MS = 60_000
 
 const SITE_NAMES: Record<Site, string> = {
@@ -37,15 +36,6 @@ const BASIS_NOTES: Record<PriceBasis, string | null> = {
   prime: 'Prime fiyatı',
 }
 
-const WHY_NOT_LABELS: Record<string, string> = {
-  garanti: 'Apple Türkiye garantili değil',
-  stok_yok: 'stokta yok',
-  fiyat_bandi: 'fiyat beklenen aralığın dışında',
-  guvenilmeyen_satici: 'güvenilir satıcı listesinde değil',
-  puansiz_satici: 'satıcı puanı yok',
-  dusuk_puan: 'satıcı puanı 8,5 altında',
-  veri_uyusmazligi: 'sayfa verileri uyuşmuyor',
-}
 
 const MONTHS = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
 
@@ -271,36 +261,18 @@ export function dispatchRecoveredNotice(previous: HealthState, now: number): Not
   }
 }
 
-function nearestRank(sorted: number[], fraction: number): number {
-  return sorted[Math.max(0, Math.ceil(fraction * sorted.length) - 1)]
-}
-
-function latencyLine(records: IngestRecord[]): string {
-  const latencies = records
-    .flatMap((record) => (record.latencyMs === null ? [] : [record.latencyMs]))
-    .sort((a, b) => a - b)
-  if (latencies.length === 0) return 'Gecikme (tetiklemeden ölçüme): ölçüm yok'
-  const p50 = formatSpan(nearestRank(latencies, 0.5))
-  const p95 = formatSpan(nearestRank(latencies, 0.95))
-  return `Gecikme (tetiklemeden ölçüme): p50 ${p50}, p95 ${p95}`
-}
-
 function snapshotLines(site: Site, snapshot: SiteSnapshot | undefined): string[] {
   const name = SITE_NAMES[site]
   if (!snapshot) return [`${name}: henüz veri yok`]
-  const status = STATUS_LABELS[snapshot.status]
-  const lines = [`${name}: ${snapshot.detail ? `${status} (${snapshot.detail})` : status}`]
-  if (snapshot.best) lines.push(`  En ucuz uygun teklif: ${offerSummary(snapshot.best)}`, `  ${snapshot.best.url}`)
-  else if (snapshot.status === 'ok') lines.push('  Uygun teklif yok')
-  if (snapshot.cheapestOther) {
-    const whyNot = snapshot.cheapestOther.why_not
-    const reason = whyNot ? ` (${WHY_NOT_LABELS[whyNot] ?? whyNot})` : ''
-    lines.push(`  Bilgi, uygun olmayan en ucuz teklif: ${offerSummary(snapshot.cheapestOther)}${reason}`)
-  }
-  return lines
+  if (snapshot.status !== 'ok') return [`${name}: ${STATUS_LABELS[snapshot.status]}`]
+  if (!snapshot.best) return [`${name}: uygun teklif yok`]
+  return [
+    `${name}: ${formatTl(snapshot.best.effective)} (${snapshot.best.color}, ${sellerText(snapshot.best)})`,
+    snapshot.best.url,
+  ]
 }
 
-export function digestMail(state: RadarState, now: number): MailText {
+export function digestMail(state: RadarState, _now: number): MailText {
   const bests = SITES.flatMap((site) => {
     const best = state.lastSites[site]?.best
     return best ? [best] : []
@@ -310,19 +282,12 @@ export function digestMail(state: RadarState, now: number): MailText {
     ? `en ucuz ${formatTl(cheapest.effective)} (${SITE_NAMES[cheapest.site]}, ${cheapest.color})`
     : 'veri yok'
   const normal = normalPrice(state.buckets)
-  const recent = state.ingests.filter((record) => record.at > now - DAY_MS)
-  const normalText =
-    normal === null ? `henüz yok (${Object.keys(state.buckets).length}/${MIN_BUCKETS} ölçüm)` : formatTl(normal)
+  const normalText = normal === null ? 'henüz yok' : formatTl(normal)
   const text = [
-    `Son veri: ${state.lastIngestAt === null ? 'henüz yok' : formatTurkeyTime(state.lastIngestAt)}`,
-    '',
     ...SITES.flatMap((site) => snapshotLines(site, state.lastSites[site])),
     '',
     `Olağan fiyat: ${normalText}`,
-    `Tüm zamanların en düşüğü: ${state.allTimeLow ? lowSummary(state.allTimeLow) : 'henüz yok'}`,
-    `Son 24 saatte gelen veri: ${recent.length} tur`,
-    latencyLine(recent),
-    `Tarama aralığı: ${cadenceMinutes(now)} dakika`,
+    `En düşük: ${state.allTimeLow ? lowSummary(state.allTimeLow) : 'henüz yok'}`,
   ]
   return { subject: `${RADAR_NAME} günlük özet: ${headline}`, text: text.join('\n') }
 }

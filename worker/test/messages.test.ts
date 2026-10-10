@@ -219,60 +219,25 @@ describe('health messages', () => {
 })
 
 describe('digest mail', () => {
-  test('summarises sites, prices, ingest count, latency and cadence', () => {
+  test('summarises sites, prices and baseline concisely', () => {
     const mail = digestMail(digestState(), NOW)
     const lines = mail.text.split('\n')
     expect(mail.subject).toBe('Fiyat Radarı günlük özet: en ucuz 103.869 TL (Amazon, Kozmik Turuncu)')
-    expect(lines[0]).toBe('Son veri: 9 Eki 13:15')
-    expect(lines).toContain('Trendyol: çalışıyor')
-    expect(lines).toContain('  En ucuz uygun teklif: 104.999 TL, Gümüş, satıcı Trendyol (9,3)')
-    expect(lines).toContain(
-      [
-        '  Bilgi, uygun olmayan en ucuz teklif: 102.500 TL, Siyah,',
-        'satıcı Teknoloji Dünyası (8,1) (satıcı puanı 9,0 altında)',
-      ].join(' '),
-    )
-    expect(lines).toContain('Hepsiburada: bot engeli (Cloudflare doğrulaması)')
-    expect(lines).toContain('Amazon: çalışıyor')
+    expect(lines).toContain('Trendyol: 104.999 TL (Gümüş, Trendyol (9,3))')
+    expect(lines).toContain('Hepsiburada: bot engeli')
+    expect(lines).toContain('Amazon: 103.869 TL (Kozmik Turuncu, Amazon (9,3))')
     expect(lines).toContain('Olağan fiyat: 105.000 TL')
     expect(lines).toContain(
-      'Tüm zamanların en düşüğü: 101.499 TL, Trendyol, Kozmik Turuncu, satıcı Trendyol (2 Eki 14:05)',
-    )
-    expect(lines).toContain('Son 24 saatte gelen veri: 4 tur')
-    expect(lines).toContain('Gecikme (tetiklemeden ölçüme): p50 1 dk 42 sn, p95 3 dk 5 sn')
-    expect(lines).toContain('Tarama aralığı: 15 dakika')
-  })
-
-  test('explains why the cheapest other offer does not count, in Turkish', () => {
-    const state = digestState()
-    const amazon = state.lastSites.amazon
-    if (!amazon) throw new Error('amazon snapshot missing')
-    state.lastSites.amazon = {
-      ...amazon,
-      cheapestOther: offer({
-        key: 'amazon:B0FQG1C99S:turkiye-magaza',
-        site: 'amazon',
-        color: 'Abis',
-        seller: 'Turkiye Magaza',
-        seller_score: null,
-        effective: 103_000,
-        qualifies: false,
-        why_not: 'guvenilmeyen_satici',
-      }),
-    }
-    expect(digestMail(state, NOW).text).toContain(
-      '  Bilgi, uygun olmayan en ucuz teklif: 103.000 TL, Abis, satıcı Turkiye Magaza (güvenilir satıcı listesinde değil)',
+      'En düşük: 101.499 TL, Trendyol, Kozmik Turuncu, satıcı Trendyol (2 Eki 14:05)',
     )
   })
 
   test('has a no-data variant', () => {
     const mail = digestMail(parseRadarState(null), NOW)
     expect(mail.subject).toBe('Fiyat Radarı günlük özet: veri yok')
-    expect(mail.text).toContain('Son veri: henüz yok')
     expect(mail.text).toContain('Trendyol: henüz veri yok')
-    expect(mail.text).toContain('Olağan fiyat: henüz yok (0/96 ölçüm)')
-    expect(mail.text).toContain('Tüm zamanların en düşüğü: henüz yok')
-    expect(mail.text).toContain('Gecikme (tetiklemeden ölçüme): ölçüm yok')
+    expect(mail.text).toContain('Olağan fiyat: henüz yok')
+    expect(mail.text).toContain('En düşük: henüz yok')
   })
 })
 
